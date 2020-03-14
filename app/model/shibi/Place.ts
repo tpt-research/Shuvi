@@ -1,4 +1,5 @@
 import Location from "./Location";
+import Departure from "./Departure";
 
 export default interface Place {
     location: Location | null;
@@ -8,6 +9,9 @@ export default interface Place {
     information: string[];
     barrier_free: boolean;
     available: boolean;
+    hasTimeDetails: boolean;
+    timeDetailsArrival: Departure | null;
+    timeDetailsDeparture: Departure | null;
 }
 
 export enum PlaceType {

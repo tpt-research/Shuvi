@@ -34,7 +34,7 @@ server.post("/shuvi/search", async function (req, res, next) {
             let result: Shuvi | null;
 
             result = await shuviCreator.createShuvi(searchBody);
-            console.log(result);
+
             if (result == null) {
                 res.status(200).send({
                     success: false,
@@ -42,11 +42,70 @@ server.post("/shuvi/search", async function (req, res, next) {
                     data: null
                 });
             } else {
+                if (result.result == null) {
+                    res.status(500).send({
+                        success: false,
+                        status: "Shibi is empty",
+                        data: null
+                    });
+                } else {
+                    res.status(200).send({
+                        success: true,
+                        status: "Success. " + result.result.trips.length + " trips found.",
+                        data: result
+                    });
+                }
+            }
+        } catch (e) {
+            res.status(500).send({
+                success: false,
+                status: "Shuvi Error occurred: " + e,
+                data: null
+            });
+        }
+    }
+});
+
+server.post("/shuvi/handshake", async function (req, res, next) {
+    let requestBody = req.body;
+
+    if (requestBody == null || requestBody == {}) {
+        res.status(400).send({
+            success: false,
+            status: "No POST body given.",
+            data: null
+        });
+    } else {
+        try {
+            let searchBody: SearchCluster = requestBody as SearchCluster;
+
+            searchBody.from.name = searchBody.from.name.substring(0, 5);
+            searchBody.to.name = searchBody.to.name.substring(0, 5);
+
+            let result: Shuvi | null;
+
+            result = await shuviCreator.createShuviHandshaked(searchBody);
+
+            if (result == null) {
                 res.status(200).send({
-                    success: true,
-                    status: "Success. " + result.result.trips.length + " trips found.",
-                    data: result
+                    success: false,
+                    status: "No results",
+                    data: null
                 });
+            } else {
+                if (result.result == null) {
+                    res.status(500).send({
+                        success: false,
+                        status: "Shibi is empty",
+                        data: null
+                    });
+                } else {
+                    res.status(200).send({
+                        success: true,
+                        status: "Success. " + result.result.trips.length + " trips found.",
+                        data: result
+                    });
+                }
             }
         } catch (e) {
             res.status(500).send({

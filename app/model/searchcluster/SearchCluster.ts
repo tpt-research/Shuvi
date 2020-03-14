@@ -8,6 +8,10 @@ export default interface SearchCluster {
 }
 
 export enum Source {
-    TPT = 'tpt',
-    FLIXBUS = 'flixbus'
+    DEUTSCHEBAHN = 'deutschebahn',
+    RMV = 'rmv',
+    BVG = 'bvg',
+    OEBB = 'oebb',
+    FLIXBUS = 'flixbus',
+    MIFAZ = 'mifaz'
 }

@@ -12,35 +12,66 @@ export default class ShuviCreator {
 
 
     public async createShuvi(search: SearchCluster): Promise<Shuvi | null> {
-        let shibiArray: Shibi[] = [];
+        this.shibiResolver.timeout = 5000;
 
-        if (search.sources.indexOf(Source.TPT) != -1) {
-            let tpt = await this.shibiResolver.getTPTShibi(search);
+        return this.shuviCreation(search);
+    }
 
-            if (tpt != null) shibiArray.push(tpt);
+    public async createShuviHandshaked(search: SearchCluster): Promise<Shuvi | null> {
+        this.shibiResolver.timeout = 1500;
+
+        return this.shuviCreation(search);
+    }
+
+    private async shuviCreation(search: SearchCluster): Promise<Shuvi | null>  {
+        let promiseArray: Promise<Shibi | null>[] = [];
+
+        if (search.sources.indexOf(Source.DEUTSCHEBAHN) != -1) {
+            promiseArray.push(this.shibiResolver.getDeutschebahnSearch(search));
+        }
+
+        if (search.sources.indexOf(Source.RMV) != -1) {
+            promiseArray.push(this.shibiResolver.getRMVSearch(search));
+        }
+
+        if (search.sources.indexOf(Source.BVG) != -1) {
+            promiseArray.push(this.shibiResolver.getBVGSearch(search));
+        }
+
+        if (search.sources.indexOf(Source.OEBB) != -1) {
+            promiseArray.push(this.shibiResolver.getOEBBSearch(search));
         }
 
         if (search.sources.indexOf(Source.FLIXBUS) != -1) {
-            let flixbus = await this.shibiResolver.getFlixbusSearch(search);
-
-            console.log(flixbus);
-
-            if (flixbus != null) shibiArray.push(flixbus);
+            promiseArray.push(this.shibiResolver.getFlixbusSearch(search));
         }
 
-        let mergedShibi: Shibi;
+        if (search.sources.indexOf(Source.MIFAZ) != -1) {
+            promiseArray.push(this.shibiResolver.getMiFazSearch(search));
+        }
 
-        try {
-            mergedShibi = ShibiMerge.mergeShibi(shibiArray);
-        } catch (e) {
-            console.error("ShuviCreator Error: " + e);
+        let sources: Shibi | null = await Promise.all(promiseArray).then(result => {
+            let shibiArray: Shibi[] = [];
+            result.forEach(source => {
+                console.log(source);
+                if (source != null) shibiArray.push(source)
+            });
+
+            try {
+                return ShibiMerge.mergeShibi(shibiArray);
+            } catch (e) {
+                console.error("ShuviCreator Error: " + e);
+                return null;
+            }
+        }).catch(err => {
+            console.error(err);
             return null;
-        }
+        });
 
         return {
             from: search.from,
             to: search.to,
-            result: mergedShibi
+            result: sources
         }
     }
 }

@@ -12,6 +12,11 @@ export enum Source {
     RMV = 'rmv',
     BVG = 'bvg',
     OEBB = 'oebb',
+    AVV = 'avv',
+    VBN = 'vbn',
+    INSA = 'insa',
+    SNCB = 'sncb',
+    ANACHB = 'anachb',
     FLIXBUS = 'flixbus',
     MIFAZ = 'mifaz'
 }

@@ -42,6 +42,22 @@ export default class ShuviCreator {
             promiseArray.push(this.shibiResolver.getOEBBSearch(search));
         }
 
+        if (search.sources.indexOf(Source.AVV) != -1) {
+            promiseArray.push(this.shibiResolver.getAVVSearch(search));
+        }
+
+        if (search.sources.indexOf(Source.INSA) != -1) {
+            promiseArray.push(this.shibiResolver.getINSASearch(search));
+        }
+
+        if (search.sources.indexOf(Source.VBN) != -1) {
+            promiseArray.push(this.shibiResolver.getVBNSearch(search));
+        }
+
+        if (search.sources.indexOf(Source.ANACHB) != -1) {
+            promiseArray.push(this.shibiResolver.getAnachBSearch(search));
+        }
+
         if (search.sources.indexOf(Source.FLIXBUS) != -1) {
             promiseArray.push(this.shibiResolver.getFlixbusSearch(search));
         }

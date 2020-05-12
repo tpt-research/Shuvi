@@ -22,20 +22,6 @@ export default class ShibiMerge {
             return + new Date(a.departure.time) - + new Date(b.departure.time);
         });
 
-        unsortedTrips.filter((trip, index) => {
-            if (unsortedTrips.indexOf(trip) == 0) {
-                return trip;
-            }
-
-            if (trip.departure.time == null) {
-                return trip;
-            }
-
-            if (trip.arrival.time != unsortedTrips[index - 1].arrival.time) {
-                return trip;
-            }
-        });
-
         let nulledTimeTrips: Trip[] = [];
         let notNulledTimeTrips: Trip[] = [];
 

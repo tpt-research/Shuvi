@@ -22,12 +22,16 @@ export default class ShibiMerge {
             return + new Date(a.departure.time) - + new Date(b.departure.time);
         });
 
-        unsortedTrips.forEach((trip) => {
+        unsortedTrips.filter((trip, index) => {
             if (unsortedTrips.indexOf(trip) == 0) {
                 return trip;
             }
 
-            if (trip.arrival.time != unsortedTrips[unsortedTrips.indexOf(trip) - 1].arrival.time) {
+            if (trip.departure.time == null) {
+                return trip;
+            }
+
+            if (trip.arrival.time != unsortedTrips[index - 1].arrival.time) {
                 return trip;
             }
         });

@@ -22,6 +22,28 @@ export default class ShibiMerge {
             return + new Date(a.departure.time) - + new Date(b.departure.time);
         });
 
+        unsortedTrips.forEach((trip) => {
+            if (unsortedTrips.indexOf(trip) == 0) {
+                return trip;
+            }
+
+            if (trip.arrival.time != unsortedTrips[unsortedTrips.indexOf(trip) - 1].arrival.time) {
+                return trip;
+            }
+        });
+
+        let nulledTimeTrips: Trip[] = [];
+
+        unsortedTrips.forEach((trip) => {
+            if (trip.departure.time != null) {
+                return trip;
+            } else {
+                nulledTimeTrips.push(trip);
+            }
+        });
+
+        unsortedTrips.push(...nulledTimeTrips);
+
         firstShibi.trips = unsortedTrips;
 
         return firstShibi;

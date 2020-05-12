@@ -37,18 +37,19 @@ export default class ShibiMerge {
         });
 
         let nulledTimeTrips: Trip[] = [];
+        let notNulledTimeTrips: Trip[] = [];
 
         unsortedTrips.forEach((trip) => {
             if (trip.departure.time != null) {
-                return trip;
+                notNulledTimeTrips.push(trip);
             } else {
                 nulledTimeTrips.push(trip);
             }
         });
 
-        unsortedTrips.push(...nulledTimeTrips);
+        notNulledTimeTrips.push(...nulledTimeTrips);
 
-        firstShibi.trips = unsortedTrips;
+        firstShibi.trips = notNulledTimeTrips;
 
         return firstShibi;
     }

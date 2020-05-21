@@ -1,75 +1,39 @@
 import Shuvi from "../../model/shuvi/Shuvi";
 import Shibi from "../../model/shibi/Shibi";
-import SearchCluster, {Source} from "../../model/searchcluster/SearchCluster";
-import ShibiResolver from "../shibiresolver/ShibiResolver";
+import SearchCluster from "../../model/searchcluster/SearchCluster";
 import ShibiMerge from "../shibimerge/ShibiMerge";
+import {ShuviModule} from "../../modules/base/ShuviModule";
 
 export default class ShuviCreator {
 
-    constructor(public API_URL: string) {}
-
-    private shibiResolver: ShibiResolver = new ShibiResolver(this.API_URL);
+    constructor(
+        public API_URL: string,
+        public modules: ShuviModule[]
+    ) {}
 
 
     public async createShuvi(search: SearchCluster): Promise<Shuvi | null> {
-        this.shibiResolver.timeout = 5000;
-
-        return this.shuviCreation(search);
+        return this.shuviCreation(search, 5000);
     }
 
     public async createShuviHandshaked(search: SearchCluster): Promise<Shuvi | null> {
-        this.shibiResolver.timeout = 1500;
-
-        return this.shuviCreation(search);
+        return this.shuviCreation(search, 1500);
     }
 
-    private async shuviCreation(search: SearchCluster): Promise<Shuvi | null>  {
+    private async shuviCreation(search: SearchCluster, timeout: number): Promise<Shuvi | null>  {
         let promiseArray: Promise<Shibi | null>[] = [];
 
-        if (search.sources.indexOf(Source.DEUTSCHEBAHN) != -1) {
-            promiseArray.push(this.shibiResolver.getDeutschebahnSearch(search));
-        }
-
-        if (search.sources.indexOf(Source.RMV) != -1) {
-            promiseArray.push(this.shibiResolver.getRMVSearch(search));
-        }
-
-        if (search.sources.indexOf(Source.BVG) != -1) {
-            promiseArray.push(this.shibiResolver.getBVGSearch(search));
-        }
-
-        if (search.sources.indexOf(Source.OEBB) != -1) {
-            promiseArray.push(this.shibiResolver.getOEBBSearch(search));
-        }
-
-        if (search.sources.indexOf(Source.AVV) != -1) {
-            promiseArray.push(this.shibiResolver.getAVVSearch(search));
-        }
-
-        if (search.sources.indexOf(Source.INSA) != -1) {
-            promiseArray.push(this.shibiResolver.getINSASearch(search));
-        }
-
-        if (search.sources.indexOf(Source.VBN) != -1) {
-            promiseArray.push(this.shibiResolver.getVBNSearch(search));
-        }
-
-        if (search.sources.indexOf(Source.ANACHB) != -1) {
-            promiseArray.push(this.shibiResolver.getAnachBSearch(search));
-        }
-
-        if (search.sources.indexOf(Source.FLIXBUS) != -1) {
-            promiseArray.push(this.shibiResolver.getFlixbusSearch(search));
-        }
-
-        if (search.sources.indexOf(Source.MIFAZ) != -1) {
-            promiseArray.push(this.shibiResolver.getMiFazSearch(search));
-        }
+        this.modules.forEach((module: ShuviModule) => {
+            if (module.source != null) {
+                if (search.sources.indexOf(module.source) != -1) {
+                    promiseArray.push(module.obtainShibiData(search, timeout, this.API_URL));
+                }
+            }
+        });
 
         let sources: Shibi | null = await Promise.all(promiseArray).then(result => {
             let shibiArray: Shibi[] = [];
             result.forEach(source => {
-                console.log(source);
                 if (source != null) shibiArray.push(source)
             });
 

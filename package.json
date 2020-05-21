@@ -9,7 +9,10 @@
     "clean": "rm -rf build",
     "rebuild:dev": "yarn run clean && yarn run dev",
     "rebuild:prod": "yarn run clean && yarn run prod",
-    "prod": "tsc && node ./build/app.js"
+    "build:prod": "tsc",
+    "run:prod": "node ./build/app.js",
+    "prod": "yarn test && yarn build:prod && yarn run:prod",
+    "test": "ts-node-dev --transpileOnly ./test/test.ts"
   },
   "dependencies": {
     "@types/express": "^4.17.2",

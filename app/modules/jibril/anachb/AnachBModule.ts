@@ -11,7 +11,7 @@ export class AnachBModule extends ShuviModule {
         timeout: number,
         API_URL: string
     ): Promise<Shibi | null> {
-        return axios.get(API_URL + "anachb.shibi",
+        return axios.get(API_URL + "vonanachb.shibi",
             {
                 timeout: timeout,
                 params: {

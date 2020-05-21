@@ -14,4 +14,4 @@ COPY . .
 RUN yarn test
 
 EXPOSE 9812
-CMD [ "yarn", "prod" ]
+CMD [ "yarn", "run:prod" ]

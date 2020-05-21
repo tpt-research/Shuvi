@@ -7,11 +7,8 @@
     "tsc": "tsc",
     "dev": "ts-node-dev --respawn --transpileOnly ./app/app.ts",
     "clean": "rm -rf build",
-    "rebuild:dev": "yarn run clean && yarn run dev",
-    "rebuild:prod": "yarn run clean && yarn run prod",
-    "build:prod": "tsc ./app/app.ts",
-    "run:prod": "node ./build/app.js",
-    "prod": "yarn test && yarn build:prod && yarn run:prod",
+    "run:prod": "ts-node ./app/app.ts",
+    "prod": "yarn test && yarn run:prod",
     "test": "ts-node-dev --transpileOnly ./test/test.ts"
   },
   "dependencies": {
@@ -20,6 +17,7 @@
     "body-parser": "^1.19.0",
     "eslint": "^6.8.0",
     "express": "^4.17.1",
+    "ts-node": "^8.10.1",
     "typescript": "^3.7.5"
   },
   "peerDependencies": {

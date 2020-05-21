@@ -9,7 +9,7 @@
     "clean": "rm -rf build",
     "rebuild:dev": "yarn run clean && yarn run dev",
     "rebuild:prod": "yarn run clean && yarn run prod",
-    "build:prod": "tsc",
+    "build:prod": "tsc ./app/app.ts",
     "run:prod": "node ./build/app.js",
     "prod": "yarn test && yarn build:prod && yarn run:prod",
     "test": "ts-node-dev --transpileOnly ./test/test.ts"

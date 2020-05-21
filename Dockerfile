@@ -1,4 +1,4 @@
-FROM node:13-alpine
+FROM node:13
 
 ENV PORT="9812"
 ENV SHIBI_URL="https://api.thepublictransport.de/shibi/"

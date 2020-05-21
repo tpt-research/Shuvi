@@ -15,4 +15,4 @@ RUN yarn test
 RUN yarn build:prod
 
 EXPOSE 9812
-CMD [ "yarn", "run:Prod" ]
+CMD [ "yarn", "run:prod" ]
